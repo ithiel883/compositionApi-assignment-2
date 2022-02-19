@@ -14,37 +14,96 @@
         <label for="amount">Amount</label>
         <input id="amount" type="number" v-model="enteredExpense" />
       </div>
-      <button>Add Expense</button>
+      <button @click="addExpense()">Add Expense</button>
     </form>
   </section>
 </template>
 
 <script>
+import {ref, computed, watch} from 'vue'
+
 export default {
-  data() {
-    return {
-      availableFunds: 100,
-      currentExpenses: 0,
-      enteredExpense: 0,
-    };
-  },
-  computed: {
-    remainingFunds() {
-      return this.availableFunds - this.currentExpenses;
-    },
-  },
-  methods: {
-    addExpense() {
-      this.currentExpenses += this.enteredExpense;
-    },
-  },
-  watch: {
-    remainingFunds(val) {
-      if (val < 0) {
-        alert('You are broke!');
+  setup() {
+    const availableFunds = 100
+
+    const currentExpenses = ref(0)
+    const enteredExpense = ref(0)
+
+const remainingFunds = computed( function(){
+  return availableFunds - currentExpenses.value
+})
+
+watch(remainingFunds, function(newValue){
+  if(newValue < 0){
+    alert('You are broke')
+  }
+
+})
+      function addExpense() {
+        currentExpenses.value = currentExpenses.value + enteredExpense.value
       }
-    },
-  },
+
+    return {
+      availableFunds,
+      currentExpenses,
+      enteredExpense,
+      addExpense,
+      remainingFunds
+    }
+  }
+//     const availableFunds = ref(100);
+//     const currentExpenses = ref(0)
+//     const enteredExpense = ref(0)
+
+   
+
+//     const remainingFunds = computed(() => {
+//       return availableFunds.value - currentExpenses.value
+//     })
+
+//     watch(remainingFunds, function(newValue, oldValue){
+//       console.log('old Value ' + oldValue)
+//       if(newValue < 0){
+//         alert('You are broke')
+//       }
+//     })
+
+//  function addExpense() {
+//       console.log('works', currentExpenses.value, enteredExpense.value)
+//       currentExpenses.value += enteredExpense.value
+//     }
+//     return {
+//       availableFunds,
+//       currentExpenses,
+//       addExpense,
+//       remainingFunds
+//     }
+  
+  // data() {
+  //   return {
+  //     availableFunds: 100,
+  //     currentExpenses: 0,
+  //     enteredExpense: 0,
+  //   };
+  // },
+  // computed: {
+  //   remainingFunds() {
+  //     return this.availableFunds - this.currentExpenses;
+  //   },
+  // },
+  // methods: {
+  //   addExpense() {
+  //     this.currentExpenses += this.enteredExpense;
+  //   },
+  // },
+  // watch: {
+  //   remainingFunds(val) {
+  //     if (val < 0) {
+  //       alert('You are broke!');
+  //     }
+  //   },
+  // },
+
 };
 </script>
 
